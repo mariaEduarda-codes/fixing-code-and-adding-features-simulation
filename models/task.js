@@ -6,10 +6,9 @@ const taskSchema = new mongoose.Schema({
     dueDate: { type: Date, required: true }
 });
 
-//Esse mét-odo não está funcionando corretamente
 taskSchema.methods.markAsCompleted = function () {
     this.status = 'completed';
-    return this.save(); // BUG: Não está salvando corretamente
+    return this.save();
 };
 
 const Task = mongoose.model('Task', taskSchema);
