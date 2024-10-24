@@ -35,6 +35,27 @@ router.get('/tasks', async (req, res) => {
     }
 });
 
+router.get('/tasks/busca', async (req, res) => {
+    try {
+        const search = await searchBy(req.query);
+
+        if (search !== null) {
+            const taskResults = await Task.find(search);
+
+            if (taskResults.length === 0) {
+                res.status(404).json({message: 'No tasks found matching the criteria.'});
+            } else {
+                res.status(200).json(taskResults);
+            }
+
+        } else {
+            res.status(404).json({message: 'No valid queries provided'});
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch tasks' });
+    }
+});
+
 // Marcar tarefa como concluída
 router.patch('/tasks/:id/complete', async (req, res) => {
     try {
@@ -114,5 +135,20 @@ router.patch('/tasks/:id/editTitleAndDescription', async (req, res) => {
         res.status(500).json({ error: 'Failed to update task' });
     }
 });
+
+async function searchBy(params) {
+    const { status } = params;
+    //const status = params.status
+
+    let search = {};
+
+    if (status) {
+        search.status = status;
+    } else {
+        search = null;
+    }
+
+    return search;
+}
 
 export default router;
