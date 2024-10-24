@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const taskSchema = new mongoose.Schema({
     title: { type: String, required: true },
@@ -14,4 +14,4 @@ taskSchema.methods.markAsCompleted = function () {
 
 const Task = mongoose.model('Task', taskSchema);
 
-module.exports = Task;
+export default Task;
